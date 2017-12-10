@@ -1,0 +1,97 @@
+start
+    // Guarda uma string na stack
+    pushs "Introduza um número: "                                               // [sp = 1]
+    // Escreve a string no topo da stack para o ecrã e apaga-a
+    writes                                                                      // [sp = 0]
+    // Lê uma linha do terminal, como string
+    read                                                                        // [sp = 1]
+    // Converte a string no topo da stack para um inteiro e apaga a string
+    atoi                                                                        // [sp = 1]
+
+    // reserva um lugar para o resultado da função fib
+    pushi 0                                                                     // [sp = 2]
+    // Vai buscar o valor lido no ecrã
+    pushl 0                                                                     // [sp = 3]
+  
+    // Adiciona o endereço da label fib ao topo da stack
+    pusha fib                                                                   // [sp = 4]
+    // retira o endereço do topo da stack e chama a função nesse endereço
+    call                                                                        // [sp = 3]
+    // Certifica-se que, em certas implementações que saltam a linha após o call, tudo executa correctamente
+    nop
+    // Retira da stack os argumentos (neste caso apenas 1)
+    pop  1                                                                      // [sp = 2]
+
+    // Adiciona a string à stack e escreve-a
+    pushs "A função devolveu: "                                                 // [sp = 3]
+    writes                                                                      // [sp = 2]
+
+    // Finalmente escreve o resultado da função fib
+    writei                                                                      // [sp = 1]
+
+    pushs "\ndebug: FIM\n"                                                      // [sp = 2]
+    writes                                                                      // [sp = 1]
+
+    stop
+
+fib: 
+    // Certifica-se que, em certas implementações que saltam a linha após a label, tudo executa correctamente
+    nop
+    // Vai buscar o parâmetro para o topo da pilha
+    pushl -1
+    // Adiciona o inteiro 2 ao topo da pilha
+    pushi 2
+    // Substitui os dois valores n e m no topo da pilha por if n < m then 1 else 0
+    inf
+    // Pega e retira o valor no topo da pilha, e caso seja 0 (falso) salta para a label not_base, caso contrário continua para a linha seguinte
+    jz not_base
+    // Adiciona o valor 1 ao topo da pilha
+    pushi 1
+    // Guarda-o no local reservado para o return da função
+    storel -2
+    // Retorna para o sítio onde o último call foi efetuado
+    return
+
+not_base:
+    // Aqui vamos chamar fib( n - 1 )
+    // Reserva um local para a função retornar
+    pushi 0
+    // Guarda n no topo da pilha [ fp - 1 ]
+    pushl -1
+    // Guarda 1 no topo da pilha
+    pushi 1
+    // Substitui os dois valores por n - 1
+    sub
+    // Adiciona o endereço de fib novamente
+    pusha fib
+    // E chama a função
+    call
+    nop
+    // Retira o n parametro da stack
+    pop 1
+
+    // Aqui vamos chamar fib( n - 2 )
+    // Reserva um local para a função retornar
+    pushi 0
+    // Guarda n no topo da pilha [ fp - 1 ]    
+    pushl -1
+    // Guarda 2 no topo da pilha
+    pushi 2
+    // Substitui os dois valores por n - 2
+    sub
+    // Adiciona o endereço de fib novamente
+    pusha fib
+    // E chama a função
+    call
+    nop
+    // Retira o n parametro da stack
+    pop 1
+
+    // Agora soma os dois resultados das duas funções
+    add
+    // E guarda a soma no local reservado para o return
+    storel -2
+
+    // Retorna para o sítio onde o último call foi efetuado    
+    return
+  
