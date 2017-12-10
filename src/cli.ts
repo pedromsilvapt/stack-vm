@@ -1,14 +1,12 @@
-import * as caporal from 'caporal';
-import * as fs from 'mz/fs';
 import { StdActions, StackVM, Parser, StopError } from './index';
-import chalk from 'chalk';
 import { prompt } from 'node-ask';
+import * as caporal from 'caporal';
 import * as trim from 'trim';
-
-Symbol.asyncIterator = Symbol.asyncIterator || Symbol( 'asyncIterator' );
+import * as fs from 'mz/fs';
+import chalk from 'chalk';
 
 caporal
-    .version( '0.5.0' )
+    .version( '0.5.3' )
     .command( 'run', 'Run a virtual machine source code file' ) 
     .argument( '<file>', 'Source code file' )
     .option( '--step-by-step <step>', 'Execute the machine line by line', caporal.BOOL ) 

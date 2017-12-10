@@ -1,12 +1,12 @@
 {
   "name": "stack-vm",
-  "version": "0.5.0",
+  "version": "0.5.2",
   "description": "A simple stack machine simulator written in typescript",
   "main": "index.js",
   "types": "index.d.ts",
   "preferGlobal": true,
   "bin": {
-    "fget": "lib/bin/cmd.js"
+    "stack-vm": "lib/cli.js"
   },
   "directories": {
     "lib": "lib"

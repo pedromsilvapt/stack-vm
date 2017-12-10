@@ -32,8 +32,8 @@ import { StackVM, StdActions, Parser } from "./index";
 
 const instructions = Parser.parse( `
 start
-push i
-write i
+pushi 2
+writei
 pushs "\n"
 writes
 stop
