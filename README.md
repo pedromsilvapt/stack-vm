@@ -1,6 +1,6 @@
 # stack-vm - A simple stack virtual machine simulator
 
-> **Note** This project can be tested online at (https://npm.runkit.com/stack-vm). Currently no graphical functions are implemented.
+> **Note** This project can be tested online at [https://npm.runkit.com/stack-vm](https://npm.runkit.com/stack-vm). Currently no graphical functions are implemented.
 
 ## Installation
 > **Note** Requires a recent version of NodeJS and NPM installed on the system
@@ -41,5 +41,6 @@ stop
 
 const vm = new StackVM( StdActions, instructions );
 
-vm.executeAll().catch( error => console.error( error.message, error.stack ) );
+vm.executeAll()
+    .catch( error => console.error( error.message, error.stack ) );
 ```

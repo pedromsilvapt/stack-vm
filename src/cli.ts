@@ -6,7 +6,7 @@ import * as fs from 'mz/fs';
 import chalk from 'chalk';
 
 caporal
-    .version( '0.5.3' )
+    .version( '0.5.4' )
     .command( 'run', 'Run a virtual machine source code file' ) 
     .argument( '<file>', 'Source code file' )
     .option( '--step-by-step <step>', 'Execute the machine line by line', caporal.BOOL ) 

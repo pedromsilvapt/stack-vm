@@ -15,7 +15,11 @@ export class WriteIntegerAction extends Action {
 
         this.expect( value, ValueType.Integer );
 
-        process.stdout.write( value.value.toString() );
+        if ( process && process.stdout && process.stdout.write ) {
+            process.stdout.write( value.value.toString() );
+        } else {
+            console.log( value.value.toString() );
+        }
     }
 }
 
@@ -31,7 +35,11 @@ export class WriteFloatAction extends Action {
 
         this.expect( value, ValueType.Float );
 
-        process.stdout.write( value.value.toString() );
+        if ( process && process.stdout && process.stdout.write ) {
+            process.stdout.write( value.value.toString() );
+        } else {
+            console.log( value.value.toString() );
+        }
     }
 }
 
@@ -49,7 +57,11 @@ export class WriteStringAction extends Action {
         
         const string = vm.strings.load( value.value );
 
-        process.stdout.write( string );
+        if ( process && process.stdout && process.stdout.write ) {
+            process.stdout.write( value.value.toString() );
+        } else {
+            console.log( value.value.toString() );
+        }
     }
 }
 

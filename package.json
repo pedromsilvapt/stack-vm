@@ -1,6 +1,6 @@
 {
   "name": "stack-vm",
-  "version": "0.5.2",
+  "version": "0.5.4",
   "description": "A simple stack machine simulator written in typescript",
   "main": "index.js",
   "types": "index.d.ts",
