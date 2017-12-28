@@ -1,3 +1,5 @@
+#!/usr/bin/node
+
 import { StdActions, StackVM, Parser, StopError } from './index';
 import { prompt } from 'node-ask';
 import * as caporal from 'caporal';
@@ -6,7 +8,7 @@ import * as fs from 'mz/fs';
 import chalk from 'chalk';
 
 caporal
-    .version( '0.5.4' )
+    .version( '0.5.5' )
     .command( 'run', 'Run a virtual machine source code file' ) 
     .argument( '<file>', 'Source code file' )
     .option( '--step-by-step <step>', 'Execute the machine line by line', caporal.BOOL ) 

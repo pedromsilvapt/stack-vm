@@ -14,11 +14,15 @@ export class LoadAction extends Action {
 
         const offset : number = parameters[ 0 ].value;
 
-        this.expect( address, [ ValueType.AddressStack ] );
+        this.expect( address, [ ValueType.AddressStack, ValueType.AddressHeap ] );
 
-        if ( address.type == ValueType.AddressStack ) {
+        if ( address.type == ValueType.AddressHeap ) {
             const index = address.value + offset;
 
+            vm.operands.push( vm.heap.load( index ).clone() );
+        } else if ( address.type == ValueType.AddressStack ) {
+            const index = address.value + offset;
+            
             vm.operands.push( vm.operands.load( index ).clone() );
         }
     }

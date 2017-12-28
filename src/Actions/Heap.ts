@@ -10,7 +10,7 @@ export class AllocAction extends Action {
     }
 
     execute ( vm : StackVM, name : string, parameters : Value[] ) {
-        const size : Value<number> = parameters[ 0 ].value;
+        const size : Value<number> = parameters[ 0 ];
 
         const address = vm.heap.alloc( size.value );
 

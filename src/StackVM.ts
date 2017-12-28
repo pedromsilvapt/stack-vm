@@ -177,6 +177,8 @@ export class Heap<I> {
             this.memory.push( new Value( ValueType.Integer, 0 ) );
         }
 
+        this.addresses.set( address, size );
+
         return address;
     }
 

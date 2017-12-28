@@ -53,7 +53,7 @@ export class StoreAction extends Action {
         const offset : number = parameters[ 0 ].value;
         
         this.expect( address, [ ValueType.AddressHeap, ValueType.AddressStack ] );
-
+        
         if ( address.type == ValueType.AddressHeap ) {
             vm.heap.store( address.value + offset, value );
         } else if ( address.type == ValueType.AddressStack ) {

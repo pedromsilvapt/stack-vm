@@ -58,9 +58,9 @@ export class WriteStringAction extends Action {
         const string = vm.strings.load( value.value );
 
         if ( process && process.stdout && process.stdout.write ) {
-            process.stdout.write( value.value.toString() );
+            process.stdout.write( string.toString() );
         } else {
-            console.log( value.value.toString() );
+            console.log( string.toString() );
         }
     }
 }
