@@ -98,7 +98,7 @@ export class PushStackAddressAction extends Action {
     }
 
     execute ( vm : StackVM, name : string, parameters : Value[] ) {
-        vm.operands.push( new Value( ValueType.AddressStack, vm.registers.stackPointer ) );
+        vm.operands.push( new Value( ValueType.AddressStack, vm.registers.stackPointer + 1 ) );
     }
 }
 

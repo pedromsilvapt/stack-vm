@@ -63,7 +63,7 @@ export class StoreAction extends Action {
 }
 
 export class StoreNAction extends Action {
-    parameters : ValueType[] = [ ValueType.Integer ];
+    parameters : ValueType[] = [];
 
     setup ( vm : StackVM ) {
         vm.actions.set( 'storen', this );

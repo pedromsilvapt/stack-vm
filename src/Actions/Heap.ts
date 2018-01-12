@@ -61,7 +61,7 @@ export class EqualAction extends Action {
         const op2 : Value<number> = vm.operands.pop();
         const op1 : Value<number> = vm.operands.pop();
         
-        if ( op2.type == op1.type && op1.type && op1.value ) {
+        if ( op2.type == op1.type && op1.value == op2.value ) {
             vm.operands.push( new Value( ValueType.Integer, 1 ) );
         } else {
             vm.operands.push( new Value( ValueType.Integer, 0 ) );

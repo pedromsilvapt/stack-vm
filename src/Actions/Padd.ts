@@ -15,7 +15,7 @@ export class PaddAction extends Action {
         const address : Value<number> = vm.operands.pop();
 
         this.expect( offset, ValueType.Integer );
-        this.expect( offset, [ ValueType.AddressCode, ValueType.AddressHeap, ValueType.AddressStack, ValueType.AddressString ] );
+        this.expect( address, [ ValueType.AddressCode, ValueType.AddressHeap, ValueType.AddressStack, ValueType.AddressString ] );
 
         vm.operands.push(
             new Value( address.type, address.value + offset.value )

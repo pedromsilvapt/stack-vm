@@ -66,7 +66,7 @@ export class UnaryIntOp extends Action {
         let value : number;
 
         if ( name == 'not' ) {
-            value = op.value > 0 ? 0 : 1;
+            value = op.value == 0 ? 1 : 0;
         } else {
             throw new Error( `Unknown int unary operand ${ name }.` );
         }
