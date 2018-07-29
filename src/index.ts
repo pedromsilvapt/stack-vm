@@ -1,4 +1,6 @@
-Symbol.asyncIterator = Symbol.asyncIterator || Symbol( 'asyncIterator' );
+if ( !Symbol.asyncIterator ) {
+    Symbol.asyncIterator = Symbol.asyncIterator || Symbol( 'asyncIterator' );
+}
 
 export { Action } from './Action';
 

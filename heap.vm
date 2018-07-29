@@ -1,0 +1,105 @@
+jump gc_bootstrap_0
+
+uf_main_1:
+nop
+
+pushi 0
+
+pushi 1
+pushi 1
+pushi 0
+pushi 2
+dup 2
+infeq
+jz rc_for_case_gt_2
+pushsp
+load -3
+storel 2
+rc_beginForLt_5:
+pushl 2
+pushsp
+load -3
+inf
+jz rc_endFor_3
+pushl 2
+pushi 1
+add
+pushfp
+pushi 0
+padd
+swap
+pushl 2
+swap
+storen
+pushs "array[ "
+writes
+pushl 2
+writei
+pushs " ] = "
+writes
+pushfp
+pushi 0
+padd
+pushl 2
+loadn
+writei
+pushi 1
+pop 1
+pushl 2
+pushi 1
+add
+storel 2
+jump rc_beginForLt_5
+rc_for_case_gt_2:
+pushsp
+load -2
+storel 2
+rc_beginForGt_4:
+pushl 2
+pushsp
+load -2
+sup
+jz rc_endFor_3
+pushl 2
+pushi 1
+add
+pushfp
+pushi 0
+padd
+swap
+pushl 2
+swap
+storen
+pushs "array[ "
+writes
+pushl 2
+writei
+pushs " ] = "
+writes
+pushfp
+pushi 0
+padd
+pushl 2
+loadn
+writei
+pushi 1
+pop 1
+pushl 2
+pushi 1
+sub
+storel 2
+jump rc_beginForGt_4
+rc_endFor_3:
+pushi 0
+storel -1
+return
+
+gc_bootstrap_0:
+nop
+pushi 0
+pusha uf_main_1
+call
+nop
+pushi 0
+popn
+

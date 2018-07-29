@@ -51,7 +51,7 @@ caporal
                         console.log( chalk.blue( 'k' ), 'keep previous lines and move forward' );
                         console.log( chalk.blue( 'empty' ), 'continue to the next line' );
                     } else if ( answer === 'q' ) {
-                        console.log(  )
+                        console.log( vm.operands );
                         break;
                     } else if ( answer === 'k' ) {
                         break;

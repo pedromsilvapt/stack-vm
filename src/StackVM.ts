@@ -24,6 +24,18 @@ export class StackVM {
         this.feed( instructions );
     }
 
+    reset () : this {
+        this.operands = new Stack;
+        this.frames = new Stack;
+        this.heap = new Heap;
+        this.strings = new StringsHeap;
+        this.registers = new StackVMRegisters( this );
+
+        this.instructions = [];
+
+        return this;
+    }
+
     extend ( actions : Action[] ) : this {
         for ( let action of actions ) {
             action.setup( this );

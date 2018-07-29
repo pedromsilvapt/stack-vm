@@ -1,0 +1,88 @@
+jump gc_bootstrap_0
+
+uf_main_1:
+nop
+
+pushi 0
+
+pushi 0
+not
+writei
+pushs "\n"
+writes
+pushi 1
+pop 1
+pushi 1
+not
+writei
+pushs "\n"
+writes
+pushi 1
+pop 1
+pushi 2
+not
+writei
+pushs "\n"
+writes
+pushi 1
+pop 1
+pushi 0
+pushi 6
+dup 2
+infeq
+jz rc_for_case_gt_2
+pushsp
+load -3
+storel 0
+rc_beginForLt_5:
+pushl 0
+pushsp
+load -3
+inf
+jz rc_endFor_3
+pushl 0
+writei
+pushs "\n"
+writes
+pushi 1
+pop 1
+pushl 0
+pushi 1
+add
+storel 0
+jump rc_beginForLt_5
+rc_for_case_gt_2:
+pushsp
+load -2
+storel 0
+rc_beginForGt_4:
+pushl 0
+pushsp
+load -2
+sup
+jz rc_endFor_3
+pushl 0
+writei
+pushs "\n"
+writes
+pushi 1
+pop 1
+pushl 0
+pushi 1
+sub
+storel 0
+jump rc_beginForGt_4
+rc_endFor_3:
+pushi 0
+storel -1
+return
+
+gc_bootstrap_0:
+nop
+pushi 0
+pusha uf_main_1
+call
+nop
+pushi 0
+popn
+
