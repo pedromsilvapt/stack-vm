@@ -31,6 +31,8 @@ export class JumpConditionalAction extends Action {
         if ( !condition.value ) {
             vm.registers.codePointer = address - 1;
         }
+
+        vm.valuesPool.free( condition );
     }
 }
 
@@ -44,7 +46,7 @@ export class PushAddressAction extends Action {
     execute ( vm : StackVM, name : string, parameters : Value[] ) {
         const address : number = parameters[ 0 ].value;
 
-        vm.operands.push( new Value( ValueType.AddressCode, address ) );
+        vm.operands.push( vm.valuesPool.acquire( ValueType.AddressCode, address ) );
     }
 }
 
@@ -66,6 +68,8 @@ export class CallAction extends Action {
         vm.registers.codePointer = address.value - 1;
 
         vm.frames.push( frame );
+        
+        vm.valuesPool.free( address );
     }
 }
 
@@ -80,7 +84,7 @@ export class ReturnAction extends Action {
         const frame : StackFrame = vm.frames.pop();
 
         while ( vm.registers.stackPointer > vm.registers.framePointer ) {
-            vm.operands.pop();
+            vm.valuesPool.free( vm.operands.pop() );
         }
 
         vm.registers.framePointer = frame.framePointer;

@@ -14,7 +14,7 @@ export class AllocAction extends Action {
 
         const address = vm.heap.alloc( size.value );
 
-        vm.operands.push( new Value( ValueType.AddressHeap, address ) );
+        vm.operands.push( vm.valuesPool.acquire( ValueType.AddressHeap, address ) );
     }
 }
 
@@ -47,6 +47,8 @@ export class FreeAction extends Action {
         this.expect( address, ValueType.AddressHeap );
 
         vm.heap.free( address.value );
+
+        vm.valuesPool.free( address );
     }
 }
 
@@ -62,9 +64,12 @@ export class EqualAction extends Action {
         const op1 : Value<number> = vm.operands.pop();
         
         if ( op2.type == op1.type && op1.value == op2.value ) {
-            vm.operands.push( new Value( ValueType.Integer, 1 ) );
+            vm.operands.push( vm.valuesPool.acquire( ValueType.Integer, 1 ) );
         } else {
-            vm.operands.push( new Value( ValueType.Integer, 0 ) );
+            vm.operands.push( vm.valuesPool.acquire( ValueType.Integer, 0 ) );
         }
+
+        vm.valuesPool.free( op1 );
+        vm.valuesPool.free( op2 );
     }
 }

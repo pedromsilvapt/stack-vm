@@ -20,6 +20,8 @@ export class WriteIntegerAction extends Action {
         } else {
             console.log( value.value.toString() );
         }
+
+        vm.valuesPool.free( value );
     }
 }
 
@@ -40,6 +42,8 @@ export class WriteFloatAction extends Action {
         } else {
             console.log( value.value.toString() );
         }
+
+        vm.valuesPool.free( value );
     }
 }
 
@@ -62,6 +66,8 @@ export class WriteStringAction extends Action {
         } else {
             console.log( string.toString() );
         }
+
+        vm.valuesPool.free( value );
     }
 }
 
@@ -72,7 +78,7 @@ export class ReadAction extends Action {
         vm.actions.set( 'read', this );
     }
 
-    async execute ( vm : StackVM, name : string, parameters : Value[] ) {
+    async read ( vm : StackVM ) : Promise<Value<number>> {
         let line : string = await prompt( '' );
         
         if ( line.endsWith( '\n' ) ) {
@@ -85,6 +91,14 @@ export class ReadAction extends Action {
 
         const address = vm.strings.store( line );
 
-        vm.operands.push( new Value( ValueType.AddressString, address ) );
+        return vm.valuesPool.acquire( ValueType.AddressString, address );
+    }
+
+    execute ( vm : StackVM, name : string, parameters : Value[] ) {
+        const fiber = vm.fiber;
+
+        vm.scheduler.suspend();
+
+        vm.scheduler.waitFor( fiber, this.read( vm ) );
     }
 }

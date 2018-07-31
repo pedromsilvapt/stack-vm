@@ -1,7 +1,12 @@
+import { Action } from "./Action";
+import { StackVM } from "./StackVM";
+
 export class Instruction {
     public name : string;
 
     public parameters : Value<any>[];
+
+    public action ?: Action = null;
 
     constructor ( name : string, parameters : Value<any>[] = [] ) {
         this.name = name;
@@ -29,7 +34,11 @@ export class Value<V = any> {
         this.value = value;
     }
 
-    clone () : Value<V> {
+    clone ( vm ?: StackVM ) : Value<V> {
+        if ( vm ) {
+            return vm.valuesPool.acquire( this.type, this.value );
+        }
+
         return new Value( this.type, this.value );
     }
 }

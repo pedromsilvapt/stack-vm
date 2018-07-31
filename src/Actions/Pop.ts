@@ -13,7 +13,7 @@ export class PopAction extends Action {
         const value : number = parameters[ 0 ].value;
 
         for ( let i = 0; i < value; i++ ) {
-            vm.operands.pop();
+            vm.valuesPool.free( vm.operands.pop() );
         }
     }
 }

@@ -45,7 +45,10 @@ export class BinaryFloatOp extends Action {
             throw new Error( `Unknown float binary operand ${ name }.` );
         }
 
-        vm.operands.push( new Value( ValueType.Float, value ) );
+        vm.valuesPool.free( op1 );
+        vm.valuesPool.free( op2 );
+
+        vm.operands.push( vm.valuesPool.acquire( ValueType.Float, value ) );
     }
 }
 
@@ -72,6 +75,8 @@ export class UnaryFloatOp extends Action {
             throw new Error( `Unknown float unary operand ${ name }.` );
         }
 
-        vm.operands.push( new Value( ValueType.Float, value ) );
+        vm.valuesPool.free( op );
+
+        vm.operands.push( vm.valuesPool.acquire( ValueType.Float, value ) );
     }
 }

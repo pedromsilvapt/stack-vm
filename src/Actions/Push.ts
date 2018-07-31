@@ -10,7 +10,7 @@ export class PushIntegerAction extends Action {
     }
 
     execute ( vm : StackVM, name : string, parameters : Value[] ) {
-        vm.operands.push( parameters[ 0 ] );
+        vm.operands.push( parameters[ 0 ].clone( vm ) );
     }
 }
 
@@ -25,7 +25,7 @@ export class PushRepeatAction extends Action {
         const value : number = parameters[ 0 ].value;
 
         for ( let i = 0; i < value; i++ ) {
-            vm.operands.push( new Value( ValueType.Integer, 0 ) );
+            vm.operands.push( vm.valuesPool.acquire( ValueType.Integer, 0 ) );
         }
     }
 }
@@ -38,7 +38,7 @@ export class PushFloatAction extends Action {
     }
 
     execute ( vm : StackVM, name : string, parameters : Value[] ) {
-        vm.operands.push( new Value( ValueType.Float, parameters[ 0 ].value ) );
+        vm.operands.push( vm.valuesPool.acquire( ValueType.Float, parameters[ 0 ].value ) );
     }
 }
 
@@ -54,7 +54,7 @@ export class PushStringAction extends Action {
         
         const address = vm.strings.store( str );
 
-        vm.operands.push( new Value( ValueType.AddressString, address ) );
+        vm.operands.push( vm.valuesPool.acquire( ValueType.AddressString, address ) );
     }
 }
 
@@ -98,7 +98,7 @@ export class PushStackAddressAction extends Action {
     }
 
     execute ( vm : StackVM, name : string, parameters : Value[] ) {
-        vm.operands.push( new Value( ValueType.AddressStack, vm.registers.stackPointer + 1 ) );
+        vm.operands.push( vm.valuesPool.acquire( ValueType.AddressStack, vm.registers.stackPointer + 1 ) );
     }
 }
 
@@ -110,7 +110,7 @@ export class PushFrameAddressAction extends Action {
     }
 
     execute ( vm : StackVM, name : string, parameters : Value[] ) {
-        vm.operands.push( new Value( ValueType.AddressStack, vm.registers.framePointer ) );
+        vm.operands.push( vm.valuesPool.acquire( ValueType.AddressStack, vm.registers.framePointer ) );
     }
 }
 
@@ -122,6 +122,6 @@ export class PushGlobalAddressAction extends Action {
     }
 
     execute ( vm : StackVM, name : string, parameters : Value[] ) {
-        vm.operands.push( new Value( ValueType.AddressStack, vm.registers.globalPointer ) );
+        vm.operands.push( vm.valuesPool.acquire( ValueType.AddressStack, vm.registers.globalPointer ) );
     }
 }

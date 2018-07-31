@@ -6,13 +6,51 @@ import caporal from 'caporal';
 import trim from 'trim';
 import fs from 'mz/fs';
 import chalk from 'chalk';
+import { Clock } from './StackVM';
 
 caporal
     .version( '0.5.7' )
+
+caporal
+    .command( 'benchmark', 'Benchmark a virtual machine source code file' )
+    .argument( '<file>', 'Source code file' )
+    .option( '--max-stack <stack>', 'Maximum stack size to prevent uncontrolled growth', caporal.INT )
+    .option( '--show-stats <stats>', 'Show performance stats after the instructions finished executing', caporal.BOOL ) 
+    .action( async ( args, options, logger ) => {
+        const code = await fs.readFile( args.file, 'utf8' );
+
+        const instructions = new Parser().parse( code );
+
+        const vm = new StackVM( StdActions, instructions );
+
+        if ( typeof options.stack === 'number' ) {
+            vm.maxStackSize = options.stack;
+        }
+
+        const runner = async () => {
+            vm.createFiberAndSwitch();
+            
+            await vm.execute();
+
+            if ( options.showStats ) {
+                console.log( 'Instructions count:', vm.instructionsCount );
+                console.log( 'Objects cache hits/miss ratio:', vm.valuesPool.cacheHitsCount, '/', vm.valuesPool.cacheMissesCount );
+                console.log( 'Objects max live count:', vm.valuesPool.maxLiveCount );
+                console.log( 'Objects pool count:', vm.valuesPool.availableCount );
+                console.log( `CPU time: ${ Clock.humanize( vm.clocks.cpu.duration ) }.` );
+                console.log( `User time: ${ Clock.humanize( vm.clocks.user.duration ) }.` );
+            }
+        };
+
+        await runner().catch( err => console.error( err.message, err.stack ) );
+    } );
+
+caporal
     .command( 'run', 'Run a virtual machine source code file' ) 
     .argument( '<file>', 'Source code file' )
     .option( '--step-by-step <step>', 'Execute the machine line by line', caporal.BOOL ) 
     .option( '--max-stack <stack>', 'Maximum stack size to prevent uncontrolled growth', caporal.INT ) 
+    .option( '--show-stats <stats>', 'Show performance stats after the instructions finished executing', caporal.BOOL ) 
     .action( async ( args, options, logger ) => {
         const code = await fs.readFile( args.file, 'utf8' );
 
@@ -63,7 +101,16 @@ caporal
                 }
             }
         } else {
-            await vm.executeAll();
+            vm.createFiberAndSwitch();
+            
+            await vm.execute().catch( err => console.error( err.message, err.stack ) );
+        }
+        
+        if ( options.showsStats ) {
+            console.log( 'Instructions count:', vm.instructionsCount );
+            console.log( 'Objects cache hits/miss ratio:', vm.valuesPool.cacheHitsCount, '/', vm.valuesPool.cacheMissesCount );
+            console.log( 'Objects max live count:', vm.valuesPool.maxLiveCount );
+            console.log( 'Objects pool count:', vm.valuesPool.availableCount );
         }
     } );
 

@@ -16,6 +16,8 @@ export class StoreFrameAction extends Action {
         
         const framePointer : number = vm.registers.framePointer;
 
+        vm.valuesPool.free( vm.operands.load( framePointer + offset ) );
+
         vm.operands.store( framePointer + offset, value );
     }
 }
@@ -34,6 +36,8 @@ export class StoreGlobalAction extends Action {
         
         const globalPointer : number = vm.registers.globalPointer;
 
+        vm.valuesPool.free( vm.operands.load( globalPointer + offset ) );
+
         vm.operands.store( globalPointer + offset, value );
     }
 }
@@ -46,22 +50,35 @@ export class StoreAction extends Action {
     }
 
     execute ( vm : StackVM, name : string, parameters : Value[] ) {
+        // We read the value we want to store from the operands stack
         const value : Value = vm.operands.pop();
 
+        // And also the address to store it in, from the operands stack
         const address : Value<number> = vm.operands.pop();
-        
+
+        // Additionally we also accept an offset for the address, as a parameter
         const offset : number = parameters[ 0 ].value;
         
         this.expect( address, [ ValueType.AddressHeap, ValueType.AddressStack ] );
         
         if ( address.type == ValueType.AddressHeap ) {
+            vm.valuesPool.free( vm.operands.load( address.value + offset + offset ) );
+
             vm.heap.store( address.value + offset, value );
         } else if ( address.type == ValueType.AddressStack ) {
+            vm.valuesPool.free( vm.operands.load( address.value + offset + offset ) );
+
             vm.operands.store( address.value + offset, value );
         }
+
+        vm.valuesPool.free( address );
     }
 }
 
+// Same as store, but instead of the offset being a parameter in the instruction code, it is
+// stored in the operands stack
+// So, we pop it (it is beneath the value in the stack, which means we have to pop the value, then pop the offset, 
+// and finally put back the value on the top of the stack) and pass it on to the store action as a parameter
 export class StoreNAction extends Action {
     parameters : ValueType[] = [];
 

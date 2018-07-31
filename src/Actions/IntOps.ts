@@ -48,7 +48,10 @@ export class BinaryIntOp extends Action {
             throw new Error( `Unknown int binary operand ${ name }.` );
         }
 
-        vm.operands.push( new Value( ValueType.Integer, value ) );
+        vm.valuesPool.free( op1 );
+        vm.valuesPool.free( op2 );
+
+        vm.operands.push( vm.valuesPool.acquire( ValueType.Integer, value ) );
     }
 }
 export class UnaryIntOp extends Action {
@@ -71,6 +74,8 @@ export class UnaryIntOp extends Action {
             throw new Error( `Unknown int unary operand ${ name }.` );
         }
 
-        vm.operands.push( new Value( ValueType.Integer, value ) );
+        vm.valuesPool.free( op );
+
+        vm.operands.push( vm.valuesPool.acquire( ValueType.Integer, value ) );
     }
 }

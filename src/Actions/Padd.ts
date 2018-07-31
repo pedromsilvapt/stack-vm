@@ -18,7 +18,10 @@ export class PaddAction extends Action {
         this.expect( address, [ ValueType.AddressCode, ValueType.AddressHeap, ValueType.AddressStack, ValueType.AddressString ] );
 
         vm.operands.push(
-            new Value( address.type, address.value + offset.value )
+            vm.valuesPool.acquire( address.type, address.value + offset.value )
         );
+
+        vm.valuesPool.free( offset );
+        vm.valuesPool.free( address );
     }
 }

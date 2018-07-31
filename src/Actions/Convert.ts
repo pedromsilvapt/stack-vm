@@ -16,7 +16,9 @@ export class StringToIntAction extends Action {
 
         const str = vm.strings.load( address.value );
 
-        vm.operands.push( new Value( ValueType.Integer, Number.parseInt( str, 10 ) ) );
+        vm.valuesPool.free( address );
+
+        vm.operands.push( vm.valuesPool.acquire( ValueType.Integer, Number.parseInt( str, 10 ) ) );
     }
 }
 
@@ -34,7 +36,9 @@ export class StringToFloatAction extends Action {
 
         const str = vm.strings.load( address.value );
 
-        vm.operands.push( new Value( ValueType.Float, Number.parseFloat( str ) ) );
+        vm.valuesPool.free( address );
+
+        vm.operands.push( vm.valuesPool.acquire( ValueType.Float, Number.parseFloat( str ) ) );
     }
 }
 
@@ -50,7 +54,9 @@ export class IntToFloatAction extends Action {
         
         this.expect( number, ValueType.Integer );
 
-        vm.operands.push( new Value( ValueType.Float, number.value ) );
+        vm.valuesPool.free( number );
+
+        vm.operands.push( vm.valuesPool.acquire( ValueType.Float, number.value ) );
     }
 }
 
@@ -66,7 +72,9 @@ export class FloatToIntAction extends Action {
         
         this.expect( number, ValueType.Float );
 
-        vm.operands.push( new Value( ValueType.Integer, Math.floor( number.value ) ) );
+        vm.valuesPool.free( number );
+
+        vm.operands.push( vm.valuesPool.acquire( ValueType.Integer, Math.floor( number.value ) ) );
     }
 }
 
@@ -84,7 +92,9 @@ export class IntToStringAction extends Action {
 
         const address = vm.strings.store( '' + number.value );
 
-        vm.operands.push( new Value( ValueType.AddressString, address ) );
+        vm.valuesPool.free( number );
+
+        vm.operands.push( vm.valuesPool.acquire( ValueType.AddressString, address ) );
     }
 }
 
@@ -102,6 +112,8 @@ export class FloatToStringAction extends Action {
 
         const address = vm.strings.store( '' + number.value );
 
-        vm.operands.push( new Value( ValueType.AddressString, address ) );
+        vm.valuesPool.free( number );
+
+        vm.operands.push( vm.valuesPool.acquire( ValueType.AddressString, address ) );
     }
 }

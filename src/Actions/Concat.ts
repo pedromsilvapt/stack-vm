@@ -18,6 +18,9 @@ export class ConcatAction extends Action {
 
         const address = vm.strings.store( '' + vm.strings.load( s1.value ) + vm.strings.load( s2.value ) );
 
-        vm.operands.push( new Value( ValueType.AddressString, address ) );
+        vm.valuesPool.free( s2 );
+        vm.valuesPool.free( s1 );
+
+        vm.operands.push( vm.valuesPool.acquire( ValueType.AddressString, address ) );
     }
 }

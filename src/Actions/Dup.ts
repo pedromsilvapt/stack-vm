@@ -16,7 +16,7 @@ export class DupAction extends Action {
 
         for ( let i = 0; i < amount; i++ ) {
             vm.operands.push(
-                vm.operands.load( pointer - amount + i ).clone()
+                vm.operands.load( pointer - amount + i ).clone( vm )
             );
         }
     }

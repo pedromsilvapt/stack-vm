@@ -19,12 +19,14 @@ export class LoadAction extends Action {
         if ( address.type == ValueType.AddressHeap ) {
             const index = address.value + offset;
 
-            vm.operands.push( vm.heap.load( index ).clone() );
+            vm.operands.push( vm.heap.load( index ).clone( vm ) );
         } else if ( address.type == ValueType.AddressStack ) {
             const index = address.value + offset;
             
-            vm.operands.push( vm.operands.load( index ).clone() );
+            vm.operands.push( vm.operands.load( index ).clone( vm ) );
         }
+
+        vm.valuesPool.free( address );
     }
 }
 
