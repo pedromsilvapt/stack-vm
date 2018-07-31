@@ -1,4 +1,4 @@
-import * as P from 'parsimmon';
+import P from 'parsimmon';
 import { Instruction, Value, ValueType } from './Instruction';
 import { parse } from 'url';
 import { digit } from 'parsimmon';

@@ -2,9 +2,9 @@
 
 import { StdActions, StackVM, Parser, StopError } from './index';
 import { prompt } from 'node-ask';
-import * as caporal from 'caporal';
-import * as trim from 'trim';
-import * as fs from 'mz/fs';
+import caporal from 'caporal';
+import trim from 'trim';
+import fs from 'mz/fs';
 import chalk from 'chalk';
 
 caporal

@@ -1,4 +1,4 @@
-import { ValueType, Value, TypeMismatchError } from "../Instruction";
+import { ValueType, Value } from "../Instruction";
 import { StackVM, StackFrame, RuntimeError, StopError } from "../StackVM";
 import { Action } from "../Action";
 
