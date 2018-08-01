@@ -11,39 +11,16 @@ import { Clock } from './StackVM';
 caporal
     .version( '0.5.7' )
 
-caporal
-    .command( 'benchmark', 'Benchmark a virtual machine source code file' )
-    .argument( '<file>', 'Source code file' )
-    .option( '--max-stack <stack>', 'Maximum stack size to prevent uncontrolled growth', caporal.INT )
-    .option( '--show-stats <stats>', 'Show performance stats after the instructions finished executing', caporal.BOOL ) 
-    .action( async ( args, options, logger ) => {
-        const code = await fs.readFile( args.file, 'utf8' );
+function showStats ( vm : StackVM ) {
+    console.log( chalk.green( '\n--- Program Terminated. STATS: ---' ) );
 
-        const instructions = new Parser().parse( code );
-
-        const vm = new StackVM( StdActions, instructions );
-
-        if ( typeof options.stack === 'number' ) {
-            vm.maxStackSize = options.stack;
-        }
-
-        const runner = async () => {
-            vm.createFiberAndSwitch();
-            
-            await vm.execute();
-
-            if ( options.showStats ) {
-                console.log( 'Instructions count:', vm.instructionsCount );
-                console.log( 'Objects cache hits/miss ratio:', vm.valuesPool.cacheHitsCount, '/', vm.valuesPool.cacheMissesCount );
-                console.log( 'Objects max live count:', vm.valuesPool.maxLiveCount );
-                console.log( 'Objects pool count:', vm.valuesPool.availableCount );
-                console.log( `CPU time: ${ Clock.humanize( vm.clocks.cpu.duration ) }.` );
-                console.log( `User time: ${ Clock.humanize( vm.clocks.user.duration ) }.` );
-            }
-        };
-
-        await runner().catch( err => console.error( err.message, err.stack ) );
-    } );
+    console.log( chalk.grey( 'CPU time:' ), Clock.humanize( vm.clocks.cpu.duration ) );
+    console.log( chalk.grey( 'User time:' ), Clock.humanize( vm.clocks.user.duration ) );
+    console.log( chalk.grey( 'Instructions count:' ), vm.instructionsCount );
+    console.log( chalk.grey( 'Objects cache hits/miss ratio:' ), vm.valuesPool.cacheHitsCount + '/' + vm.valuesPool.cacheMissesCount );
+    console.log( chalk.grey( 'Objects max live count:' ), vm.valuesPool.maxLiveCount );
+    console.log( chalk.grey( 'Objects pool count:' ), vm.valuesPool.availableCount );
+}
 
 caporal
     .command( 'run', 'Run a virtual machine source code file' ) 
@@ -107,10 +84,7 @@ caporal
         }
         
         if ( options.showsStats ) {
-            console.log( 'Instructions count:', vm.instructionsCount );
-            console.log( 'Objects cache hits/miss ratio:', vm.valuesPool.cacheHitsCount, '/', vm.valuesPool.cacheMissesCount );
-            console.log( 'Objects max live count:', vm.valuesPool.maxLiveCount );
-            console.log( 'Objects pool count:', vm.valuesPool.availableCount );
+            showStats( vm );
         }
     } );
 
