@@ -58,7 +58,7 @@ export class FiberSendAction extends Action {
 
         this.expect( id, ValueType.Integer );
 
-        const fiber = vm.fiber[ id.value ];
+        const fiber = vm.fibers[ id.value ];
 
         if ( !fiber ) {
             throw new Error( `Can't send to non existing fiber ${ id }.` );
@@ -90,7 +90,7 @@ export class FiberSwitchAction extends Action {
 
         vm.valuesPool.free( id );
 
-        vm.scheduler.switch( fiber, [] );
+        vm.scheduler.switch( fiber );
     }
 }
 
@@ -115,7 +115,7 @@ export class FiberRunAction extends Action {
 
         vm.valuesPool.free( id );
 
-        vm.scheduler.run( fiber, [] );
+        vm.scheduler.run( fiber );
     }
 }
 
@@ -171,7 +171,15 @@ export class FiberKillAction extends Action {
 
         this.expect( count, ValueType.Integer );
 
-        return vm.actions.get( 'fiber' ).execute( vm, 'yield', [ count ] );
+        const current = vm.fiber;
+
+        if ( current != null && current.caller != null ) {
+            vm.actions.get( 'yield' ).execute( vm, 'yield', [ count ] );
+
+            delete vm.fibers[ current.id ];
+        } else {
+            vm.actions.get( 'stop' ).execute( vm, 'stop', [] );
+        }
     }
 }
 

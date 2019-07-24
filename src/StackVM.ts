@@ -91,6 +91,7 @@ export class StackVM {
     createFiber () : StackVMFiber {
         const fiber = new StackVMFiber( this.fibers.length );
 
+        // TODO DANGER Free fibers!!! Memory leak right here
         this.fibers.push( fiber );
 
         return fiber;
@@ -112,8 +113,6 @@ export class StackVM {
         this.clocks.cpu.resume();
 
         while ( error == null ) {
-            debugger;
-
             try {
                 if ( !this.fiber ) {
                     if ( options && options.stopOn && options.stopOn.wait ) {
@@ -147,6 +146,7 @@ export class StackVM {
     
                 const instruction = this.instructions[ fiber.registers.codePointer ];
     
+                // We cache the instruction action and validation instead of running it every execution
                 if ( !instruction.action ) {
                     if ( !this.actions.has( instruction.name ) ) {
                         return new Error( `No registered action named "${ instruction.name }".` );
@@ -161,6 +161,7 @@ export class StackVM {
                     }
                 }
 
+                // Pad instructions stats count
                 this.instructionsCount++;
 
                 const action = instruction.action;                
@@ -187,6 +188,7 @@ export class StackVM {
 
         this.clocks.user.pause();
 
+        // TODO Do we really need to use an exception to handle stopping the program????
         if ( error && !( error instanceof StopError ) ) throw error;
     }
 
@@ -289,7 +291,7 @@ export class StackVMScheduler extends EventEmitter {
         this.vm.fiber = caller;
     }
 
-    switch ( fiber : StackVMFiber, args : Value<any>[] ) {
+    switch ( fiber : StackVMFiber, args : Value<any>[] = [] ) {
         for ( let arg of args ) {
             fiber.operands.push( arg );
         }
@@ -297,7 +299,7 @@ export class StackVMScheduler extends EventEmitter {
         this.vm.fiber = fiber;
     }
 
-    run ( fiber : StackVMFiber, args : Value<any>[] ) {
+    run ( fiber : StackVMFiber, args : Value<any>[] = [] ) {
         fiber.caller = this.vm.fiber;
 
         this.switch( fiber, args );

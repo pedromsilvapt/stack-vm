@@ -120,6 +120,7 @@ export class StopAction extends Action {
     }
 
     execute ( vm : StackVM, name : string, parameters : Value[] ) {
+        // Study a different way of performing a stop, namely switching a flag in the vm
         throw new StopError();
     }
 }

@@ -1,0 +1,54 @@
+start
+    jump main
+
+fiber:
+    // Load the parameters
+    // pushl -1
+    // pushl 0
+    // Replace them both with a single number: the result
+    add
+
+    // Yield the result (a single value)
+    yield 1
+
+    pushi 0
+    kill
+
+main:
+    pushs "Creating one fiber"
+
+    // Create a fiber
+    pusha fiber
+    spawn
+
+    // Send the first argument to the fiber
+    // We dup the id of the fiber we just created
+    dup 1
+    pushi 1
+    send
+
+    // Send the second argument to the fiber
+    // We dup the id of the fiber we just created
+    dup 1
+    pushi 2
+    send
+
+    // Finally we switch the context to the fiber
+    dup 1
+    run
+
+    // The returned value should be on the top of the stack
+    writei
+    pushs "\n"
+    writes
+
+    // Switch back to the fiber
+    dup 1
+    run
+
+    // Write the result
+    writei
+    pushs "\n"
+    writes
+
+    stop

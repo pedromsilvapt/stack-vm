@@ -39,6 +39,8 @@ caporal
             vm.maxStackSize = options.stack;
         }
 
+        vm.createFiberAndSwitch();
+
         if ( options.stepByStep ) {
             for await ( let result of vm.stepByStep() ) {
                 const instruction = vm.instructions[ vm.registers.codePointer ];
@@ -77,13 +79,11 @@ caporal
                     break;
                 }
             }
-        } else {
-            vm.createFiberAndSwitch();
-            
+        } else {            
             await vm.execute().catch( err => console.error( err.message, err.stack ) );
         }
         
-        if ( options.showsStats ) {
+        if ( options.showStats ) {
             showStats( vm );
         }
     } );

@@ -41,6 +41,10 @@ export class Value<V = any> {
 
         return new Value( this.type, this.value );
     }
+
+    toString () {
+        return `V(${this.type}; ${this.value})`;
+    }
 }
 
 export class TypeMismatchError extends Error {
