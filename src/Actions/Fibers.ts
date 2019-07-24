@@ -157,19 +157,61 @@ export class FiberYieldNAction extends Action {
     }
 }
 
+export enum FiberStatus {
+    Dead = 0,
+    Sleeping = 1,
+    Running = 2
+}
+
+export class FiberCurrentAction extends Action {
+    parameters : ValueType[] = [];
+
+    setup ( vm : StackVM ) {
+        vm.actions.set( 'fiber', this );
+    }
+
+    execute ( vm : StackVM, name : string, parameters : Value[] ) {
+        vm.fiber.operands.push( vm.valuesPool.acquire( ValueType.Integer, vm.fiber.id ) );
+    }
+}
+
+export class FiberStatusAction extends Action {
+    parameters : ValueType[] = [];
+
+    setup ( vm : StackVM ) {
+        vm.actions.set( 'fiberst', this );
+    }
+
+    execute ( vm : StackVM, name : string, parameters : Value[] ) {
+        const id : Value<number> = vm.operands.pop();
+
+        this.expect( id, ValueType.Integer );
+
+        const fiber = vm.fibers[ id.value ];
+
+        let state = FiberStatus.Sleeping;
+
+        if ( !fiber ) {
+            state = FiberStatus.Dead;
+        } else if ( fiber.id == vm.fiber.id ) {
+            state = FiberStatus.Running;
+        }
+        
+        vm.fiber.operands.push( vm.valuesPool.acquire( ValueType.Integer, state ) );
+    }
+}
+
 // Killing a fiber has two possible outcomes: yielding control to the caller (if there is one)
 // or suspending the vm if there was none
 export class FiberKillAction extends Action {
-    parameters : ValueType[] = [];
+    parameters : ValueType[] = [ ValueType.Integer ];
 
     setup ( vm : StackVM ) {
         vm.actions.set( 'kill', this );
     }
 
     execute ( vm : StackVM, name : string, parameters : Value[] ) {
-        const count : Value<number> = vm.operands.pop();
-
-        this.expect( count, ValueType.Integer );
+        const count : Value<number> = parameters[ 0 ];
 
         const current = vm.fiber;
 
@@ -180,6 +222,22 @@ export class FiberKillAction extends Action {
         } else {
             vm.actions.get( 'stop' ).execute( vm, 'stop', [] );
         }
+    }
+}
+
+export class FiberKillNAction extends Action {
+    parameters : ValueType[] = [];
+
+    setup ( vm : StackVM ) {
+        vm.actions.set( 'killn', this );
+    }
+
+    execute ( vm : StackVM, name : string, parameters : Value[] ) {
+        const count : Value<number> = vm.operands.pop();
+
+        this.expect( count, ValueType.Integer );
+
+        vm.actions.get( 'kill' ).execute( vm, 'kill', [ count ] );
     }
 }
 

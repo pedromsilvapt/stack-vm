@@ -1,22 +1,22 @@
-import { StackVM, Instruction, Value, ValueType, StdActions, Parser } from "./index";
+import { StackVM, Instruction, Value, ValueType, StdActions, Parser } from ".";
 
 const vm = new StackVM( StdActions );
 
 // vm.executeAll( [
-//     new Instruction( 'pushi', [ new Value( ValueType.Integer, 1 ) ] ),
-//     new Instruction( 'pushi', [ new Value( ValueType.Integer, 2 ) ] ),
+//     new Instruction( 'pushi', [ vm.valuesPool.acquire( ValueType.Integer, 1 ) ] ),
+//     new Instruction( 'pushi', [ vm.valuesPool.acquire( ValueType.Integer, 2 ) ] ),
 //     new Instruction( 'add', [] ),
 //     new Instruction( 'writei' ),
-//     new Instruction( 'pushs', [ new Value( ValueType.String, "Hello World.\n" ) ] ),
+//     new Instruction( 'pushs', [ vm.valuesPool.acquire( ValueType.String, "Hello World.\n" ) ] ),
 //     new Instruction( 'writes' ),
-//     new Instruction( 'pushs', [ new Value( ValueType.String, "Hello World 2.\n" ) ] ),
-//     new Instruction( 'pushi', [ new Value( ValueType.Integer, 2 ) ] ),
-//     new Instruction( 'pushi', [ new Value( ValueType.Integer, 2 ) ] ),
-//     new Instruction( 'pushi', [ new Value( ValueType.Integer, 2 ) ] ),
-//     new Instruction( 'pushl', [ new Value( ValueType.Integer, 0 ) ] ),
-//     new Instruction( 'pushs', [ new Value( ValueType.String, "Goodbye World 2.\n" ) ] ),
-//     new Instruction( 'storel', [ new Value( ValueType.Integer, 0 ) ] ),
-//     new Instruction( 'pushl', [ new Value( ValueType.Integer, 0 ) ] ),
+//     new Instruction( 'pushs', [ vm.valuesPool.acquire( ValueType.String, "Hello World 2.\n" ) ] ),
+//     new Instruction( 'pushi', [ vm.valuesPool.acquire( ValueType.Integer, 2 ) ] ),
+//     new Instruction( 'pushi', [ vm.valuesPool.acquire( ValueType.Integer, 2 ) ] ),
+//     new Instruction( 'pushi', [ vm.valuesPool.acquire( ValueType.Integer, 2 ) ] ),
+//     new Instruction( 'pushl', [ vm.valuesPool.acquire( ValueType.Integer, 0 ) ] ),
+//     new Instruction( 'pushs', [ vm.valuesPool.acquire( ValueType.String, "Goodbye World 2.\n" ) ] ),
+//     new Instruction( 'storel', [ vm.valuesPool.acquire( ValueType.Integer, 0 ) ] ),
+//     new Instruction( 'pushl', [ vm.valuesPool.acquire( ValueType.Integer, 0 ) ] ),
 //     // new Instruction( 'debug' ),
 //     new Instruction( 'writes' ),
 //     new Instruction( 'stop' ),

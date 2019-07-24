@@ -13,7 +13,7 @@ import { PaddAction } from "./Actions/Padd";
 import { PopAction, PopNAction } from "./Actions/Pop";
 import { PushIntegerAction, PushRepeatAction, PushFloatAction, PushStringAction, PushGlobalOperandAction, PushFrameOperandAction, PushStackAddressAction, PushFrameAddressAction, PushGlobalAddressAction } from "./Actions/Push";
 import { StoreFrameAction, StoreGlobalAction, StoreAction, StoreNAction } from "./Actions/Store";
-import { FiberKillAction, FiberRunAction, FiberSendAction, FiberSpawnAction, FiberSuspendAction, FiberSwitchAction, FiberYieldAction, FiberYieldNAction } from "./Actions/Fibers";
+import { FiberKillAction, FiberRunAction, FiberSendAction, FiberSpawnAction, FiberSuspendAction, FiberSwitchAction, FiberYieldAction, FiberYieldNAction, FiberCurrentAction, FiberStatusAction } from "./Actions/Fibers";
 
 export var NodeIoActions : Action[] = [ new WriteIntegerAction(), new WriteFloatAction(), new WriteStringAction(), new ReadAction() ];
 
@@ -26,6 +26,7 @@ export var StdActions : Action[] = [
     new AllocAction(), new AllocNAction(), new FreeAction(), new EqualAction(),
     new BinaryIntOp(), new UnaryIntOp(),
     new FiberKillAction(), new FiberRunAction(), new FiberSendAction(), new FiberSpawnAction(), new FiberSuspendAction(), new FiberSwitchAction(), new FiberYieldAction(), new FiberYieldNAction(),
+    new FiberCurrentAction(), new FiberStatusAction,
     ...NodeIoActions,
     new LoadAction(), new LoadNAction(),
     new SwapAction(), new DebugAction(),

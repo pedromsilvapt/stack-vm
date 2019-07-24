@@ -2,6 +2,13 @@ start
     jump main
 
 fiber:
+    pushs "Child fiber: "
+    writes
+    fiber
+    writei
+    pushs "\n"
+    writes
+
     // Load the parameters
     // pushl -1
     // pushl 0
@@ -12,10 +19,15 @@ fiber:
     yield 1
 
     pushi 0
-    kill
+    kill 1
 
 main:
-    pushs "Creating one fiber"
+    pushs "Main fiber: "
+    writes
+    fiber
+    writei
+    pushs "\n"
+    writes
 
     // Create a fiber
     pusha fiber
@@ -38,6 +50,8 @@ main:
     run
 
     // The returned value should be on the top of the stack
+    pushs "Yielded "
+    writes
     writei
     pushs "\n"
     writes
@@ -47,6 +61,16 @@ main:
     run
 
     // Write the result
+    pushs "Returned "
+    writes
+    writei
+    pushs "\n"
+    writes
+
+    pushs "Child fiber status: "
+    writes
+    dup 1
+    fiberst
     writei
     pushs "\n"
     writes
